@@ -18,6 +18,24 @@ import java.util.List;
 public class OrderController {
 
     private final OrderService orderService;
+
+    @GetMapping(path="/byuser")
+    public List<Order> orderByUser(){
+        return orderService.orderListByUser();
+    }
+    @GetMapping(path="/notdelivered")
+    public List<Order> orderByUserNotDelivered(){
+        return orderService.listOfNotDeliveredOrders();
+    }
+    @GetMapping(path="/delivered")
+    public List<Order> orderByUserDelivered(){
+        return orderService.listOfDeliveredOrders();
+    }
+
+    @GetMapping(path="/setdelivered/{id}")
+    public Order setDeliveredOrder(@PathVariable("id")Long id){
+        return orderService.setDeliveredOrder(id);
+    }
     //@JsonView(View.OnlyId.class)
     @PostMapping(path = "")
     public Order addOrder(@RequestPart("items") List<ItemHolder> items){
@@ -53,4 +71,5 @@ public class OrderController {
     public void deleteOrder(@PathVariable("id")Long id){
         orderService.removeOrder(id);
     }
+
 }

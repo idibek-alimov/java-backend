@@ -1,6 +1,8 @@
 package maryam.service.product;
 
 import lombok.RequiredArgsConstructor;
+import maryam.controller.product.CreateArticleHolder;
+import maryam.controller.product.PictureHolder;
 import maryam.data.product.ProductRepository;
 import maryam.data.user.UserRepository;
 import maryam.models.inventory.Inventory;
@@ -44,11 +46,41 @@ public class ProductService implements ProductServiceInterface{
         }
         product.setUser(user);
         Product createdProduct = productRepository.save(product);
+        System.out.println("before add article");
         createdProduct.addArticle(articleService.addArticle(inventories,pictures,color,createdProduct));
-//        List<Inventory> createdInventories = inventoryService.addInventories(inventories,createdProduct);
+        System.out.println("after add article");
+        //        List<Inventory> createdInventories = inventoryService.addInventories(inventories,createdProduct);
 //        List<Picture> createdPictures = pictureService.addPictures(pictures,createdProduct);
 //        createdProduct.setPictures(createdPictures);
 //        createdProduct.setInventory(createdInventories);
+        tagService.addTagToProduct(createdProduct,tags);
+
+        return createdProduct;
+    }
+    public Product addProduct(Product product,
+                              List<Tag> tags,
+                              List<CreateArticleHolder> articleHolders,
+                                List<PictureHolder> pictureHolders)  {
+        User user = userRepository.findByUsername((String)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        if(user == null){
+            throw new RuntimeException("the fucking user is not found");
+        }
+        product.setUser(user);
+        Product createdProduct = productRepository.save(product);
+        for(int i=0;i<articleHolders.size();i++){
+            createdProduct.addArticle(articleService.addArticle(
+                    articleHolders.get(i).getInventories(),
+                    pictureHolders.get(i).getPictures(),
+                    articleHolders.get(i).getColor(),
+                    createdProduct));
+        }
+//        for(CreateArticleHolder articleHolder:articleHolders){
+//            createdProduct.addArticle(articleService.addArticle(
+//                    articleHolder.getInventories(),
+//                    articleHolder.getPictures(),
+//                    articleHolder.getColor(),
+//                    createdProduct));
+//        }
         tagService.addTagToProduct(createdProduct,tags);
 
         return createdProduct;

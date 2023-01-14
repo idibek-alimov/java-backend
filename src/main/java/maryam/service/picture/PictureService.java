@@ -28,11 +28,16 @@ public class PictureService implements PictureServiceInterface{
         List<Picture> pictureList = new ArrayList<>();
         Picture newPic;
         for(MultipartFile pic:pictures){
+            System.out.println("one");
             picname = storageService.save(pic);
+            System.out.println("two");
             newPic = new Picture(picname);
+            System.out.println("three");
             newPic.setArticle(article);
+            System.out.println("four");
             pictureList.add(pictureRepository.save(newPic));
-        }
+            System.out.println("five");
+          }
         return pictureList;
     }
 

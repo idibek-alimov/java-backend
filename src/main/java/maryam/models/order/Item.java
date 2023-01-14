@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import maryam.models.product.Article;
 import maryam.models.product.Product;
 import maryam.serializer.ItemSerializer;
 import maryam.serializer.View;
@@ -31,15 +32,16 @@ public class Item {
     @ManyToOne(fetch = FetchType.EAGER)
 //    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 //    @JsonIdentityReference(alwaysAsId = true)
-    private Product product;
+    private Article article;
     private String size;
     //@JsonView(View.OnlyId.class)
     private Integer amount;
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     private Order order;
-    public Item(Product product,String size,Integer amount,Order order){
-        this.product = product;
+    public Item(Article article,String size,Integer amount,Order order){
+        this.article = article;
+        this.size = size;
         this.amount = amount;
         this.order = order;
     }

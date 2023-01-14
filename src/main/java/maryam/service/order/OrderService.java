@@ -22,11 +22,15 @@ public class OrderService {
     private final ItemService itemService;
     private final OrderRepository orderRepository;
     public Order addOrder(List<ItemHolder> items){
+
         User user = userRepository.findByUsername((String)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        Order order = new Order(user);
-        order = orderRepository.save(order);
-        itemService.addItems(items,order);
-        return order;
+        if(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString()!="anonymousUser"&& items.size()!=0) {
+            Order order = new Order(user);
+            order = orderRepository.save(order);
+            itemService.addItems(items, order);
+            return order;
+        }
+        return null;
     }
     public Order checkOutOrder(Long id){
         Optional<Order> optionalOrder = orderRepository.findById(id);
@@ -39,8 +43,42 @@ public class OrderService {
             return null;
         }
     }
+
+    public Order setDeliveredOrder(Long id){
+        Optional<Order> optionalOrder = orderRepository.findById(id);
+        if(optionalOrder.isPresent()){
+            Order order = optionalOrder.get();
+            order.setDelivered(true);
+            return order;
+        }
+            return null;
+    }
+
+    public List<Order> orderListByUser(){
+        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        User user = userRepository.findByUsername(username);
+        return orderRepository.findByUser(user);
+    }
     public List<Order> listOfOrders(){
         return (List<Order>) orderRepository.findAll();
+    }
+    public List<Order> listOfDeliveredOrders(){
+        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        if(username!="anonymousUser") {
+            Long id = userRepository.findByUsername(username).getId();
+
+            return orderRepository.findByUserDelivered(id);
+        }
+        return null;
+    }
+    public List<Order> listOfNotDeliveredOrders(){
+        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        if(username!="anonymousUser") {
+            Long id = userRepository.findByUsername(username).getId();
+
+            return orderRepository.findByUserNotDelivered(id);
+        }
+        return null;
     }
     public Iterable<Order> uncheckedOrders(){
         return orderRepository.findByCheckedIsNull();

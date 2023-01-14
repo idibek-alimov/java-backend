@@ -53,8 +53,31 @@ public class ProductController {
                                  @RequestPart("size")List<Inventory> inventories,
                                  @RequestPart("tags")List<Tag> tags,
                                  @RequestPart("color")Color color){
-
+        System.out.println("inside post");
+        for(Inventory inventory:inventories){
+            System.out.println(inventory);
+        }
         return productService.addProduct(product,inventories,color,pictures,tags);
+
+    }
+    @PostMapping(path="/create",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_OCTET_STREAM_VALUE,MediaType.IMAGE_JPEG_VALUE})
+    public Product newCreateProduct(@RequestPart("product") Product product,
+                                 @RequestPart("tags")List<Tag> tags,
+                                 @RequestPart("article")List<CreateArticleHolder> articleHolders,
+                                    @RequestPart("pictures")List<ArrayList<MultipartFile>> pic){
+        System.out.println("got this far");
+        System.out.println(pic.size());
+        System.out.println(pic.get(0));
+        System.out.println(pic.get(0));
+        System.out.println(pic.get(0).getClass());
+        System.out.println(pic.get(0));
+
+        return null;
+
+                                 //   @RequestPart("pictures")List<PictureHolder> pictureHolders){
+
+        //return productService.addProduct(product,tags,articleHolders,pic);
+
 
     }
     @PostMapping(path="/addarticle/{id}",consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -65,6 +88,7 @@ public class ProductController {
                                  @RequestPart("color")Color color,
                                 @PathVariable("id")Long id){
         System.out.println("inside the add article thing");
+
         return productService.addArticleToProduct(inventories,color,pictures,id);
 
     }
