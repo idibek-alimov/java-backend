@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -37,6 +40,16 @@ public class FileStorageService implements FileStorageServiceInterface {
         try{
             System.out.println("before saving image");
             System.out.println(file.getInputStream());
+            ////////
+            System.out.println("BEfore the new stuff line 1");
+            BufferedImage bi =(BufferedImage) file.getResource();  // retrieve image
+            System.out.println("BTNS line 2");
+            File outputfile = new File(new_name);
+            System.out.println("BTNS line 3");
+            ImageIO.write(bi, "jpg", outputfile);
+            System.out.println("AFTer the new stuff");
+            ///////
+
             System.out.println(this.root.resolve(new_name));
             Files.copy(file.getInputStream(),this.root.resolve(new_name));
             System.out.println("after saving image");
