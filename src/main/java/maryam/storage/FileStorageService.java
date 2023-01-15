@@ -36,6 +36,8 @@ public class FileStorageService implements FileStorageServiceInterface {
         String new_name = String.format("%s%s",System.currentTimeMillis(),random.nextInt(100000)+"."+extension);
         try{
             System.out.println("before saving image");
+            System.out.println(file.getInputStream());
+            System.out.println(this.root.resolve(new_name));
             Files.copy(file.getInputStream(),this.root.resolve(new_name));
             System.out.println("after saving image");
             return new_name;
