@@ -6,6 +6,18 @@ spring:
 		username: ${PROD_DB_USERNAME}
 		password: ${PROD_DB_PASSWORD}
 		name: spring-blog
+	    initialize:always
+	jpa:
+		properties:
+			javax:
+				persistence:
+					create-database-schemas : true
+
+		hibernate:
+			ddl-auto:update:
+	batch:
+		initialize-schema:always
+
 
 	sql:
 		init:
