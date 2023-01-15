@@ -31,17 +31,17 @@ public class FileStorageService implements FileStorageServiceInterface {
     @Override
     public String save(MultipartFile file) {
         Random random = new Random();
-        System.out.println(file.getOriginalFilename());
-        System.out.println(file.getClass());
-        System.out.println(file.getSize());
-        System.out.println(file.getResource());
-        System.out.println(file.getContentType());
+
         String extension = file.getOriginalFilename().split("\\.")[1];
         String new_name = String.format("%s%s",System.currentTimeMillis(),random.nextInt(100000)+"."+extension);
         try{
+            System.out.println("before saving image");
             Files.copy(file.getInputStream(),this.root.resolve(new_name));
+            System.out.println("after saving image");
             return new_name;
         }catch (Exception e){
+            System.out.println("something vent wrong");
+            System.out.println(e);
             throw new RuntimeException("Cloud not store the file.Error:"+ e.getMessage());
         }
 
