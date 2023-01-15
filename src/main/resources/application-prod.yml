@@ -9,7 +9,8 @@ spring:
 		name: spring-blog
 		initialization-mode: always
 		initialize: always
-
+	resources:
+		static-locations: file:uploads/
 	jpa:
 		properties:
 			javax:
