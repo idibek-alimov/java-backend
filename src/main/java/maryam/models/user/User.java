@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 //import maryam.models.order.Order;
 import maryam.models.role.Role;
 import maryam.serializer.UserSerializer;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 import java.sql.Array;
@@ -26,6 +27,8 @@ import java.util.List;
 //@JsonSerialize(using = UserSerializer.class)
 //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class User {
+
+    public enum Gender {Male,Female};
     @Id
     @GeneratedValue(generator = "user_id_generator", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "user_id_genrator", sequenceName = "sc.user_id_generator",allocationSize=1)
@@ -37,6 +40,13 @@ public class User {
     private String password;
     private String name;
 
+    @Column(unique = true)
+    private String email;
+
+    private Gender gender;
+    private String profilePic;
+    @Column
+    private String phoneNumber;
     @ManyToMany(fetch = FetchType.EAGER)
     private Collection<Role> roles = new ArrayList<>();
 

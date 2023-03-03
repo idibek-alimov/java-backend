@@ -18,20 +18,21 @@ import java.util.Random;
 import java.util.stream.Stream;
 
 @Service
-public class FileStorageService implements FileStorageServiceInterface {
+public class FileStorageService {//implements FileStorageServiceInterface {
 
     private final Path root = Paths.get("uploads");
-
-    @Override
+    //private final Path userRoot = Paths.get("userPhotos");
+//    @Override
     public void init() {
         try{
             Files.createDirectory(root);
+    //        Files.createDirectory(userRoot);
         }catch (IOException e){
             throw new RuntimeException("Cloud not initialize folder for upload!");
         }
     }
 
-    @Override
+  //  @Override
     public String save(MultipartFile file) {
         Random random = new Random();
 
@@ -41,13 +42,13 @@ public class FileStorageService implements FileStorageServiceInterface {
             System.out.println("before saving image");
             System.out.println(file.getInputStream());
             ////////
-            System.out.println("BEfore the new stuff line 1");
-            BufferedImage bi =(BufferedImage) file.getResource();  // retrieve image
-            System.out.println("BTNS line 2");
-            File outputfile = new File(new_name);
-            System.out.println("BTNS line 3");
-            ImageIO.write(bi, "jpg", outputfile);
-            System.out.println("AFTer the new stuff");
+//            System.out.println("BEfore the new stuff line 1");
+//            BufferedImage bi =(BufferedImage) file.getResource();  // retrieve image
+//            System.out.println("BTNS line 2");
+//            File outputfile = new File(new_name);
+//            System.out.println("BTNS line 3");
+//            ImageIO.write(bi, "jpg", outputfile);
+//            System.out.println("AFTer the new stuff");
             ///////
 
             System.out.println(this.root.resolve(new_name));
@@ -62,7 +63,7 @@ public class FileStorageService implements FileStorageServiceInterface {
 
     }
 
-    @Override
+    //@Override
     public Resource load(String filename) {
         try{
             Path file = root.resolve(filename);
@@ -77,12 +78,12 @@ public class FileStorageService implements FileStorageServiceInterface {
         }
     }
 
-    @Override
+    //@Override
     public void deleteAll() {
         FileSystemUtils.deleteRecursively(root.toFile());
     }
 
-    @Override
+    //@Override
     public Stream<Path> loadAll() {
         try{
             return Files.walk(this.root,1).filter(path->!path.equals(this.root)).map(this.root::relativize);
